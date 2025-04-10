@@ -15,14 +15,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-from django.urls import path
-from . import views
-
+from django.urls import path, include  # ✅ include is used to delegate to the app
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('bookstore.urls')),
-    path('books/', views.book_list, name='book_list'),
-    path('add-to-cart/<int:book_id>/', views.add_to_cart, name='add_to_cart'),# Point to your app
+    path('', include('bookstore.urls')),  # ✅ all routing handled in the app
 ]

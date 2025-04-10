@@ -54,3 +54,10 @@ def cart_view(request):
     cart = request.session.get('cart', [])
     books = Book.objects.filter(id__in=cart)
     return render(request, 'bookstore/cart.html', {'cart_books': books})
+
+
+
+def payment_view(request):
+    # Simulate clearing cart after payment
+    request.session['cart'] = []
+    return redirect('book_list')  # Redirect back to book list
