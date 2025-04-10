@@ -1,8 +1,12 @@
-<h2>Available Books</h2>
-{% for book in books %}
-  <div style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
-    <h3>{{ book.title }} by {{ book.author }}</h3>
-    <p><strong>Price:</strong> ₹{{ book.price }}</p>
-    <p>{{ book.description }}</p>
-  </div>
-{% endfor %}
+<h1>Available Books</h1>
+<ul>
+  {% for book in books %}
+    <li>
+      {{ book.title }} by {{ book.author }} - ₹{{ book.price }}
+      <form method="post" action="{% url 'add_to_cart' book.id %}">
+        {% csrf_token %}
+        <button type="submit">Add to Cart</button>
+      </form>
+    </li>
+  {% endfor %}
+</ul>

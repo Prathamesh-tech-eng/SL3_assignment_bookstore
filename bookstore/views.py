@@ -1,4 +1,10 @@
 from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+
+from django.shortcuts import redirect, get_object_or_404
+from .models import Book
 
 # Create your views here.
 from django.http import HttpResponse
@@ -10,9 +16,7 @@ def book_list(request):
     return render(request, 'bookstore/book_list.html', {'books': books})
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+
 
 def user_login(request):
     if request.method == "POST":
@@ -33,3 +37,14 @@ def home(request):
 def user_logout(request):
     logout(request)
     return redirect('login')
+
+
+def add_to_cart(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    cart = request.session.get('cart', [])
+    
+    cart.append(book_id)
+    request.session['cart'] = cart
+    request.session.modified = True
+    
+    return redirect('book_list')
