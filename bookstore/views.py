@@ -48,3 +48,9 @@ def add_to_cart(request, book_id):
     request.session.modified = True
     
     return redirect('book_list')
+
+
+def cart_view(request):
+    cart = request.session.get('cart', [])
+    books = Book.objects.filter(id__in=cart)
+    return render(request, 'bookstore/cart.html', {'cart_books': books})
