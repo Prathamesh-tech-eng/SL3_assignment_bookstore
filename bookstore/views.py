@@ -3,8 +3,12 @@ from django.shortcuts import render
 # Create your views here.
 from django.http import HttpResponse
 
+from .models import Book
+
 def book_list(request):
-    return HttpResponse("Welcome to the Bookstore!")
+    books = Book.objects.all()
+    return render(request, 'bookstore/book_list.html', {'books': books})
+
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
