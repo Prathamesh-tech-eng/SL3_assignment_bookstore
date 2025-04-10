@@ -1,13 +1,15 @@
 from django.urls import path
-from . import views
-from .views import payment_view
+from . import views # Import views from the current directory
+
+app_name = 'bookstore' # Namespace for URLs
 
 urlpatterns = [
-    path('', views.user_login, name='login'),  # root URL shows login page
-    path('home/', views.home, name='home'),
-    path('logout/', views.user_logout, name='logout'),
-    path('books/', views.book_list, name='book_list'),
-    path('add-to-cart/<int:book_id>/', views.add_to_cart, name='add_to_cart'),
-    path('cart/', views.cart_view, name='cart_view'),
-    path('payment/', payment_view, name='payment'),
+    path('', views.HomeView.as_view(), name='home'), 
+    path('books/', views.BookListView.as_view(), name='book_list'),
+    path('login/', views.CustomLoginView.as_view(), name='login'), 
+    path('logout/', views.logout_view, name='logout'), 
+    path('cart/', views.CartView.as_view(), name='cart_view'), 
+    # book_id is passed in the URL for adding to cart
+    path('add-to-cart/<int:book_id>/', views.AddToCartView.as_view(), name='add_to_cart'), 
+    path('payment/', views.PaymentView.as_view(), name='payment'), 
 ]
