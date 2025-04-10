@@ -1,0 +1,8 @@
+<h2>Available Books</h2>
+{% for book in books %}
+  <div style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
+    <h3>{{ book.title }} by {{ book.author }}</h3>
+    <p><strong>Price:</strong> ₹{{ book.price }}</p>
+    <p>{{ book.description }}</p>
+  </div>
+{% endfor %}
