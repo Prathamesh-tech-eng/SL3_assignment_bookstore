@@ -1,12 +1,39 @@
-<h1>Available Books</h1>
-<ul>
-  {% for book in books %}
-    <li>
-      {{ book.title }} by {{ book.author }} - ₹{{ book.price }}
-      <form method="post" action="{% url 'add_to_cart' book.id %}">
-        {% csrf_token %}
-        <button type="submit">Add to Cart</button>
-      </form>
-    </li>
-  {% endfor %}
-</ul>
+{% extends 'bookstore/base.html' %}
+
+{% block title %}Books - Bookstore{% endblock %}
+
+{% block content %}
+    <h1>Our Books</h1>
+    <div class="row"> 
+        {% if books %}
+            {% for book in books %}
+                <div class="col-md-6 col-lg-4 book-card"> 
+                    <div class="card h-100">
+                        
+                        <div class="card-body d-flex flex-column"> 
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">By: {{ book.author }}</h6>
+                            <p class="card-text">
+                                {% if book.description %}
+                                    {{ book.description|truncatewords:20 }} 
+                                {% else %}
+                                    No description available.
+                                {% endif %}
+                            </p>
+                            <p class="card-text"><strong>Price: ${{ book.price }}</strong></p>
+                           
+                            <form action="{% url 'bookstore:add_to_cart' book.id %}" method="post" class="mt-auto">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary w-100">Add to Cart</button> 
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col">
+                <p class="alert alert-warning">No books are available at the moment.</p> 
+            </div>
+        {% endif %}
+    </div> 
+{% endblock %}

@@ -1,26 +1,48 @@
-<!-- bookstore/templates/bookstore/cart.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Your Cart</title>
-</head>
-<body>
-    <h1>Cart Items</h1>
-    {% if cart_books %}
-        <ul>
-            {% for book in cart_books %}
-                <li>{{ book.title }} - {{ book.price }}</li>
-            {% endfor %}
-        </ul>
-        <form method="get" action="{% url 'book_list' %}">
-            <button type="submit">Back to Book List</button>
-        </form>
-        <form method="post" action="{% url 'pay_now' %}">
-            {% csrf_token %}
-            <button type="submit">Pay Now</button>
-        </form>
+{% extends 'bookstore/base.html' %}
+
+{% block title %}Your Cart - Bookstore{% endblock %}
+
+{% block content %}
+    <h1>Your Shopping Cart</h1>
+
+    {% if is_empty %}
+        <div class="alert alert-info" role="alert"> {# Bootstrap alert #}
+          Your cart is empty. <a href="{% url 'bookstore:book_list' %}" class="alert-link">Continue Shopping</a>.
+        </div>
     {% else %}
-        <p>Your cart is empty.</p>
+        <ul class="list-group mb-3"> {# Bootstrap list group #}
+            {% for item in cart_items %}
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+                <div>
+                    <h6 class="my-0">{{ item.book.title }}</h6>
+                    <small class="text-muted">Quantity: {{ item.quantity }}</small>
+                </div>
+                <span class="text-muted">${{ item.item_total|floatformat:2 }}</span>
+                 <!-- Add remove/update quantity forms here later if needed -->
+            </li>
+            {% endfor %}
+            <li class="list-group-item d-flex justify-content-between">
+                <strong>Total (USD)</strong>
+                <strong>${{ total_price|floatformat:2 }}</strong>
+            </li>
+        </ul>
+
+
+        <!-- Payment Button -->
+        {% if user.is_authenticated %}
+         <form action="{% url 'bookstore:payment' %}" method="get">
+             {% csrf_token %}
+             <button type="submit" class="btn btn-success w-100">Proceed to Payment (Simulated)</button> {# Green success button #}
+         </form>
+        {% else %}
+         <div class="alert alert-warning" role="alert">
+            <a href="{% url 'bookstore:login' %}?next={% url 'bookstore:cart_view' %}" class="alert-link">Login</a> to Proceed to Payment.
+         </div>
+        {% endif %}
+
     {% endif %}
-</body>
-</html>
+
+    <hr class="my-4"> {# Bootstrap margin utility #}
+    <a href="{% url 'bookstore:book_list' %}" class="btn btn-outline-secondary">← Continue Shopping</a> {# Outline button #}
+
+{% endblock %}
