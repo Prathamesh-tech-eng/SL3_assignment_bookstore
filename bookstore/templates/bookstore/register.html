@@ -7,7 +7,7 @@
     <div class="col-md-6">
         <h1>Register New Account</h1>
 
-        {% include 'bookstore/partials/messages.html' %} {# Include messages partial #}
+        {% include 'bookstore/partials/messages.html' %} 
 
         <form method="post" action="{% url 'bookstore:register' %}" novalidate>
             {% csrf_token %}

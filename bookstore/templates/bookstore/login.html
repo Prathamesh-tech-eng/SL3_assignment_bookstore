@@ -7,11 +7,11 @@
         <div class="col-md-6">
             <h1>Login</h1>
 
-            {% include 'bookstore/partials/messages.html' %} {# Include messages partial #}
+            {% include 'bookstore/partials/messages.html' %} 
 
             <form method="post" action="{% url 'bookstore:login' %}" novalidate>
                 {% csrf_token %}
-                <input type="hidden" name="next" value="{{ next|default:'' }}"> {# Pass next URL #}
+                <input type="hidden" name="next" value="{{ next|default:'' }}"> 
 
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>

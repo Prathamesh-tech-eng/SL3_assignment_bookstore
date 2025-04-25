@@ -9,11 +9,11 @@
         <h5 class="text-muted mb-3">By: {{ book.author }}</h5>
 
         <div class="card">
-             {# Add image here if you have one: <img src="..." class="card-img-top" alt="..."> #}
+             
             <div class="card-body">
                 <p class="card-text">
                     {% if book.description %}
-                        {{ book.description|linebreaks }} {# Use linebreaks filter for TextField #}
+                        {{ book.description|linebreaks }} 
                     {% else %}
                         No description available.
                     {% endif %}
