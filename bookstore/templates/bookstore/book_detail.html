@@ -1,0 +1,35 @@
+{% extends 'bookstore/base.html' %}
+
+{% block title %}{{ book.title }} - Bookstore{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2"> {# Center content #}
+        <h1>{{ book.title }}</h1>
+        <h5 class="text-muted mb-3">By: {{ book.author }}</h5>
+
+        <div class="card">
+             {# Add image here if you have one: <img src="..." class="card-img-top" alt="..."> #}
+            <div class="card-body">
+                <p class="card-text">
+                    {% if book.description %}
+                        {{ book.description|linebreaks }} {# Use linebreaks filter for TextField #}
+                    {% else %}
+                        No description available.
+                    {% endif %}
+                </p>
+                <hr>
+                <p class="card-text fs-4"><strong>Price: ${{ book.price }}</strong></p> {# Larger price #}
+
+                <form action="{% url 'bookstore:add_to_cart' book.id %}" method="post">
+                     {% csrf_token %}
+                     <button type="submit" class="btn btn-primary btn-lg w-100">Add to Cart</button> {# Large button #}
+                </form>
+            </div>
+        </div>
+        <div class="mt-4">
+             <a href="{% url 'bookstore:book_list' %}" class="btn btn-outline-secondary">← Back to Book List</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

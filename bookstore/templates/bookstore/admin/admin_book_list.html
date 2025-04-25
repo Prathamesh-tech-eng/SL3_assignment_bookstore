@@ -1,0 +1,25 @@
+{% extends 'bookstore/base.html' %} {# Or an admin_base.html #}
+{% block title %}Manage Books{% endblock %}
+{% block content %}
+  <h1>Manage Books</h1>
+  {% include 'bookstore/partials/messages.html' %}
+  <a href="{% url 'bookstore:admin_book_create' %}" class="btn btn-success mb-3">Add New Book</a>
+  <table class="table table-striped">
+    <thead><tr><th>Title</th><th>Author</th><th>Price</th><th>Actions</th></tr></thead>
+    <tbody>
+      {% for book in books %}
+      <tr>
+        <td>{{ book.title }}</td>
+        <td>{{ book.author }}</td>
+        <td>${{ book.price|floatformat:2 }}</td>
+        <td>
+          <a href="{% url 'bookstore:admin_book_update' book.id %}" class="btn btn-sm btn-warning">Edit</a>
+          <a href="{% url 'bookstore:admin_book_delete' book.id %}" class="btn btn-sm btn-danger">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4">No books found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

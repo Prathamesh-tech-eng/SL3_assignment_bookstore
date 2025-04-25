@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    # command: gunicorn bookstore_project.wsgi:application --bind 0.0.0.0:8000 # Production command
+    volumes:
+      - .:/app # Mount current directory to /app in container (for development)
+      # For production, you might copy code in Dockerfile and not use volume mount for code
+      - sqlite_data:/app/db # Mount volume for database persistence
+    ports:
+      - "8000:8000" # Map host port 8000 to container port 8000
+    environment:
+      - SECRET_KEY=${SECRET_KEY} # Example: Load secret key from env file
+      - DEBUG=${DEBUG}           # Example: Load debug setting from env file
+    # depends_on: # Add if using separate DB service like Postgres
+    #   - db
+    env_file:
+       - .env.dev # Optional: load environment variables from a file
+
+volumes:
+  sqlite_data: # Define the volume for SQLite persistence

@@ -1,0 +1,79 @@
+pipeline {
+    agent any // Or specify Docker agent: agent { dockerfile true }
+
+    environment {
+        // Define environment variables if needed, e.g., credentials
+        // DOCKERHUB_CREDENTIALS = credentials('your-dockerhub-credentials-id')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out code...'
+                // Git checkout is usually handled automatically by Jenkins SCM config
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building Docker image...'
+                // Example using docker-compose build
+                sh 'docker-compose build web'
+                // Example using docker build directly
+                // script {
+                //     dockerImage = docker.build("your-dockerhub-username/bookstore:${env.BUILD_ID}")
+                // }
+            }
+        }
+
+        stage('Test') {
+            // Requires setting up tests (e.g., using Django's test runner)
+            steps {
+                echo 'Running tests (Placeholder)...'
+                // Example: Run tests inside the container
+                // sh 'docker-compose run --rm web python manage.py test bookstore'
+                echo 'No tests configured yet.'
+            }
+        }
+
+        // Optional: Push to Docker Registry (requires login)
+        // stage('Push Image') {
+        //     steps {
+        //         echo 'Pushing Docker image...'
+        //         script {
+        //             docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
+        //                 dockerImage.push() // Push image built in Build stage
+        //                 dockerImage.push("latest")
+        //             }
+        //         }
+        //     }
+        // }
+
+        stage('Deploy') {
+            // Deployment depends heavily on your target environment (e.g., server, K8s)
+            steps {
+                echo 'Deploying application (Placeholder)...'
+                // Example: SSH into a server and run docker-compose up
+                // sshagent(['your-server-ssh-credentials-id']) {
+                //    sh 'ssh user@your-server.com "cd /path/to/app && docker-compose pull && docker-compose up -d"'
+                // }
+                echo 'No deployment steps configured yet.'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished.'
+            // Clean up workspace, send notifications, etc.
+            // cleanWs()
+        }
+        success {
+             echo 'Pipeline succeeded!'
+        }
+        failure {
+             echo 'Pipeline failed!'
+        }
+    }
+}
